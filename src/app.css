@@ -26,7 +26,7 @@ html {
 body {
     display: flex;
     flex-direction: column;
-    background-image: url(./images/background.jpg);
+    background-image: url(/images/background.jpg);
     background-color: rgba(31, 26, 27, 0.5);
     /* Color de fondo con opacidad */
     background-blend-mode: overlay;
