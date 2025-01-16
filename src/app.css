@@ -1,0 +1,50 @@
+/* --- Tipografias --- */
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Wix+Madefor+Display:wght@400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400..800&display=swap");
+
+/* --- Components --- */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+
+* {
+    /* display: flexbox; */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    vertical-align: baseline;
+
+}
+
+html {
+    min-height: 100%;
+    position: relative;
+}
+
+/*Configuracion recomendada para el body*/
+body {
+    display: flex;
+    flex-direction: column;
+    background-image: url(./images/background.jpg);
+    background-color: rgba(31, 26, 27, 0.5);
+    /* Color de fondo con opacidad */
+    background-blend-mode: overlay;
+    /* Mezcla el color de fondo con la imagen */
+    /* background-color: #27292b; */
+    min-height: 100vh;
+    /* height: 100%;
+    width: 100%; */
+    /*Tener cuidado con deformación*/
+}
+
+/*list-style elimina diseño de lista*/
+ol,
+ul {
+    list-style: none;
+}
+
+/*Eliminamos diseño de link*/
+a {
+    text-decoration: none;
+}
