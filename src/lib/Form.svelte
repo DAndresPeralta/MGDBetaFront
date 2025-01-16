@@ -34,9 +34,11 @@
 			if (res.status === 'success') {
 				console.log('Login exitoso');
 
-				setTimeout(() => {
-					goto('/dash');
-				}, 3000);
+				goto('/dash');
+
+				// setTimeout(() => {
+				// 	goto('/dash');
+				// }, 3000);
 			} else {
 				console.log('Error');
 
