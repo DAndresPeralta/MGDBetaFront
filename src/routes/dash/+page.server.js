@@ -12,6 +12,7 @@ export async function load({ fetch }) {
 				'content-type': 'application/json'
 			}
 		});
+		console.log(result);
 		return result;
 	};
 
@@ -19,6 +20,7 @@ export async function load({ fetch }) {
 	// const text = await result.text(); // Obtener la respuesta como texto
 	// console.log('Respuesta del servidor:', text);
 	const returnedData = await result.json();
+	console.log("Dentro de +page.server.js");
 	console.log(returnedData.success);
 
 	if (returnedData.success !== true) {
