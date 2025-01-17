@@ -3,7 +3,7 @@
 import { redirect } from '@sveltejs/kit';
 import axios from 'axios';
 
-export async function load({ fetch, cookies }) {
+export async function load({ fetch }) {
 	const userLoggedInStatus = async () => {
 	const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth`, {
 				withCredentials: true,
