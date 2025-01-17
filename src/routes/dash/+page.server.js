@@ -1,18 +1,17 @@
 // Proteccion de rutas *****************
 
 import { redirect } from '@sveltejs/kit';
+import axios from 'axios';
 
 export async function load({ fetch, cookies }) {
 	const userLoggedInStatus = async () => {
-		const result = await fetch(`${import.meta.env.VITE_API_URL}/api/auth`, {
-			method: 'GET',
-			// credentials: 'include',
-			headers: {
-				Accept: 'application/json',
-				'content-type': 'application/json',
-				Cookie: cookies.get('jwt')
-			}
-		});
+	const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth`, {
+				withCredentials: true,
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json'
+				}
+			});
 		console.log(result);
 		return result;
 	};
