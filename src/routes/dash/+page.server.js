@@ -1,7 +1,6 @@
 // Proteccion de rutas *****************
 
 import { redirect } from '@sveltejs/kit';
-import axios from 'axios';
 
 export async function load({ fetch }) {
 	const userLoggedInStatus = async () => {
