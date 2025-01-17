@@ -33,12 +33,10 @@
 
 			if (res.status === 'success') {
 				console.log('Login exitoso');
-
-				await goto('/dash', { replaceState: true }); // Vercel
-
-				// setTimeout(() => {
-				// 	goto('/dash');
-				// }, 3000);
+				
+				setTimeout(() => {
+					goto('/dash');
+				}, 3000);
 			} else {
 				console.log('Error');
 
