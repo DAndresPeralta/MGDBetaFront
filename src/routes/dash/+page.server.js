@@ -6,7 +6,7 @@ export async function load({ fetch, cookies }) {
 	const userLoggedInStatus = async () => {
 		const result = await fetch(`${import.meta.env.VITE_API_URL}/api/auth`, {
 			method: 'GET',
-			credentials: 'include',
+			// credentials: 'include',
 			headers: {
 				Accept: 'application/json',
 				'content-type': 'application/json',
