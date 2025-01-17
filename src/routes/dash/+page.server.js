@@ -9,7 +9,6 @@ export async function load({ fetch }) {
 			method: 'GET',
 			credentials: 'include',
 			headers: {
-				Accept: 'application/json',
 				'content-type': 'application/json'
 			}
 		});
