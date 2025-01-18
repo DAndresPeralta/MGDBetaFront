@@ -42,6 +42,7 @@
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
 	const cookie = event.cookies.get('jwt');
+	console.log(cookie);
 
 	// Lista de rutas públicas que no requieren autenticación
 	const publicRoutes = ['/'];
