@@ -27,6 +27,11 @@ export async function handle({ event, resolve }) {
 			// VER SUCCESS OJO!
 			return await resolve(event);
 		}
+
+		return new Response(null, {
+			status: 303,
+			headers: { location: '/' }
+		});
 	} catch (error) {
 		console.error('Error al verificar el token:', error.message);
 	}
