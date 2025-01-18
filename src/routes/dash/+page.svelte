@@ -76,7 +76,9 @@
 	// --- Remito
 	// --- Tabla
 	const getOrders = async () => {
-		const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`);
+		const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`, {
+			withCredentials: true
+		});
 		order = response.data.result.map((item) => ({
 			id: item._id,
 			serie: item.serie,
