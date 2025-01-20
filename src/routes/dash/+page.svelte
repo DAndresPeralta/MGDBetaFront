@@ -53,15 +53,13 @@
 				}
 			});
 
-			console.log(response.status);
-
 			if (response) {
 				spinner.set(false);
 				mostrarForm.set(false);
 				toast.set({ openToast: true, messageToast: 'Remito creado exitosamente', kind: 'success' });
 			}
 			getOrders();
-			metricas();
+			// metricas();
 		} catch (error) {
 			spinner.set(false);
 			mostrarForm.set(false);
