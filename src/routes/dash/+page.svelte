@@ -31,6 +31,15 @@
 		{ id: 4, title: 'Ingresos Mensuales', value: '-', icon: '📈' }
 	];
 
+	const dateFormat = (date) => {
+		const newDate = new Date(date);
+		return newDate.toLocaleString('es-ES', {
+			day: '2-digit',
+			month: '2-digit',
+			year: 'numeric'
+		});
+	};
+
 	// --- Remito
 	const remitero = async (event) => {
 		try {
@@ -80,7 +89,7 @@
 		order = response.data.result.map((item) => ({
 			id: item._id,
 			serie: item.serie,
-			date: item.date,
+			date: dateFormat(item.date),
 			client: item.client,
 			cuil: item.cuil,
 			email: item.email,
