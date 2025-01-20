@@ -90,6 +90,7 @@
 			product: item.product,
 			total: item.total
 		}));
+		metricas(order);
 		orderStore.set(order);
 	};
 
@@ -157,15 +158,15 @@
 	// --- Tabla
 
 	// --- Métricas
-	const metricas = async () => {
+	const metricas = async (orders) => {
 		try {
 			let riCounter = 0;
 			let mtCounter = 0;
 			let cfCounter = 0;
 			let ieCounter = 0;
 
-			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`);
-			const orders = response.data.result;
+			// const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`);
+			// const orders = response.data.result;
 
 			orders.forEach((item) => {
 				if (item.taxpayer === 'MONOTRIBUTISTA') mtCounter++;
@@ -185,7 +186,7 @@
 
 	onMount(() => {
 		getOrders();
-		metricas();
+		// metricas();
 	});
 </script>
 
