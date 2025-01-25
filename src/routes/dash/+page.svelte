@@ -51,7 +51,8 @@
 				product: event.detail.products.map((product) => ({
 					name: product.name,
 					quantity: product.quantity,
-					price: product.price
+					price: product.price,
+					discount: product.discount
 				}))
 			};
 

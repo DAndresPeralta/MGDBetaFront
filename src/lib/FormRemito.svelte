@@ -36,7 +36,7 @@
 
 	const agregar = async (e) => {
 		e.preventDefault();
-		products = [...products, { name: '', quantity: null, price: null }];
+		products = [...products, { name: '', quantity: null, price: null, discount: null }];
 	};
 </script>
 
@@ -109,6 +109,15 @@
 						labelText="Precio Unitario"
 						placeholder="Ingrese el precio unitario"
 						bind:value={product.price}
+						required
+					/>
+				</div>
+				<div class="input-group">
+					<TextInput
+						type="number"
+						labelText="Porcentaje de Descuento"
+						placeholder="Ingrese el procentaje de descuento"
+						bind:value={product.discount}
 						required
 					/>
 				</div>
