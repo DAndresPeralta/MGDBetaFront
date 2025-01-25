@@ -166,7 +166,8 @@
 		padding-left: 1rem;
 		padding-right: 1rem;
 		width: 97%;
-		background-color: rgb(32, 32, 32);
+		/* background-color: rgb(32, 32, 32); */
+		background-color: #525252;
 	}
 
 	/* Asegura que los elementos del form estén alineados y con espaciado */
