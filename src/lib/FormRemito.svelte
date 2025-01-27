@@ -100,6 +100,7 @@
 						labelText="Cantidad"
 						placeholder="Ingrese la cantidad"
 						bind:value={product.quantity}
+						min="0"
 						required
 					/>
 				</div>
@@ -109,6 +110,8 @@
 						labelText="Precio Unitario"
 						placeholder="Ingrese el precio unitario"
 						bind:value={product.price}
+						step="0.01"
+						min="0"
 						required
 					/>
 				</div>
@@ -118,6 +121,8 @@
 						labelText="Porcentaje de Descuento"
 						placeholder="Ingrese el procentaje de descuento"
 						bind:value={product.discount}
+						step="0.01"
+						min="0"
 						required
 					/>
 				</div>
