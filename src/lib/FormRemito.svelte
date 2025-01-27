@@ -15,8 +15,9 @@
 	let items = [
 		{ id: '0', text: 'Responsable Inscripto' },
 		{ id: '1', text: 'Monotributista' },
-		{ id: '2', text: 'Consumidor Final' },
-		{ id: '3', text: 'Iva Excento' }
+		{ id: '2', text: 'Iva Excento' },
+		{ id: '3', text: 'Consumidor Final' },
+		{ id: '4', text: 'Consumidor Final - Mat. Primas' }
 	];
 
 	const tax = (e) => {
