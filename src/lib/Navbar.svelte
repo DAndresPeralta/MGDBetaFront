@@ -79,7 +79,7 @@
 			<HeaderNavItem href="/" text="Modificar" />
 			<HeaderNavItem href="/" text="Eliminar" />
 		</HeaderNavMenu> -->
-		<HeaderNavMenu text="Remitos">
+		<HeaderNavMenu text="Comprobantes">
 			<HeaderNavItem on:click={crearRemito} href="/" text="Crear" />
 			<HeaderNavItem on:click={tabla} href="/" text="Consultar" />
 		</HeaderNavMenu>
