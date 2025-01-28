@@ -1,5 +1,11 @@
 <script>
-	import { FluidForm, TextInput, Dropdown } from 'carbon-components-svelte';
+	import {
+		FluidForm,
+		TextInput,
+		Dropdown,
+		DatePicker,
+		DatePickerInput
+	} from 'carbon-components-svelte';
 	import Button from './Button.svelte';
 	import { mostrarForm } from './js/store.js';
 	import { createEventDispatcher } from 'svelte';
@@ -11,6 +17,7 @@
 	let email;
 	let taxpayer;
 	let products = [{ name: '', quantity: null, price: null }];
+	let date;
 
 	let items = [
 		{ id: '0', text: 'Responsable Inscripto' },
@@ -26,7 +33,7 @@
 
 	const crear = async (e) => {
 		e.preventDefault();
-		dispatch('crearRemito', { client, cuil, email, taxpayer, products });
+		dispatch('crearRemito', { client, cuil, email, taxpayer, products, date });
 	};
 
 	const cancelar = async (e) => {
@@ -88,6 +95,11 @@
 				bind:value={taxpayer}
 				required
 			/> -->
+		</div>
+		<div class="input-group">
+			<DatePicker datePickerType="single" on:change bind:value={date}>
+				<DatePickerInput placeholder="mm/dd/yyyy" />
+			</DatePicker>
 		</div>
 		<h1>Producto</h1>
 

@@ -44,6 +44,7 @@
 	const remitero = async (event) => {
 		try {
 			const data = {
+				date: event.detail.date,
 				client: event.detail.client,
 				cuil: event.detail.cuil,
 				email: event.detail.email,
