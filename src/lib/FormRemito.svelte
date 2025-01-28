@@ -98,7 +98,7 @@
 		</div>
 		<div class="input-group">
 			<DatePicker datePickerType="single" on:change bind:value={date}>
-				<DatePickerInput placeholder="mm/dd/yyyy" />
+				<DatePickerInput size="xl" placeholder="Seleccione una fecha" />
 			</DatePicker>
 		</div>
 		<h1>Producto</h1>
