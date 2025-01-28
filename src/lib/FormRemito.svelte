@@ -39,6 +39,13 @@
 		e.preventDefault();
 		products = [...products, { name: '', quantity: null, price: null, discount: null }];
 	};
+
+	const quitar = async (e) => {
+		e.preventDefault();
+		if (products.length > 1) {
+			products = products.slice(0, -1);
+		}
+	};
 </script>
 
 <div class="form-container">
@@ -131,6 +138,7 @@
 		{/each}
 
 		<Button type="button" kind="secondary" title="+" on:click={agregar} />
+		<Button type="button" kind="danger" title="-" on:click={quitar} />
 
 		<!-- <div class="input-group">
 			<TextInput

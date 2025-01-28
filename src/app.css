@@ -27,6 +27,10 @@ body {
     display: flex;
     flex-direction: column;
     background-image: url(/images/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
     background-color: rgba(31, 26, 27, 0.5);
     /* Color de fondo con opacidad */
     background-blend-mode: overlay;
@@ -47,4 +51,67 @@ ul {
 /*Eliminamos diseño de link*/
 a {
     text-decoration: none;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    /* Ancho del scrollbar */
+    height: 12px;
+    /* Altura del scrollbar horizontal */
+}
+
+::-webkit-scrollbar-track {
+    background: #302e2e;
+    /* Color del fondo del track */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
+    /* Efecto Material */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #1b1b1b;
+    /* Color principal del pulgar (azul Carbon) */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    border: 3px solid #f4f4f4;
+    /* Espaciado entre el pulgar y el track */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    /* Transiciones suaves */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #1b1b1b;
+    /* Color más oscuro al pasar el mouse */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    /* Efecto de elevación (Material Design) */
+}
+
+/* Scroll en Firefox */
+* {
+    scrollbar-width: thin;
+    /* Scroll fino */
+    scrollbar-color: #1b1b1b #f4f4f4;
+    /* Pulgar (azul Carbon) y fondo del track */
+}
+
+/* Opcional: scroll horizontal */
+::-webkit-scrollbar-horizontal {
+    height: 10px;
+}
+
+::-webkit-scrollbar-horizontal-thumb {
+    background-color: #1b1b1b;
+    border-radius: 10px;
+}
+
+/* Opcional: fondo oscuro */
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #262626;
+    /* Fondo oscuro Carbon */
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background-color: #3d70b2;
+    /* Azul más claro para contraste */
 }
