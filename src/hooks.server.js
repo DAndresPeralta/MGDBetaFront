@@ -44,5 +44,14 @@ export async function handle({ event, resolve }) {
 			});
 		}
 	}
-	return await resolve(event);
+	const response = await resolve(event);
+
+	if (event.url.pathname.startsWith('/dash')) {
+		// Prevenir caché de la página /dash
+		response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+		response.headers.set('Pragma', 'no-cache');
+		response.headers.set('Expires', '0');
+	}
+
+	return response;
 }
