@@ -10,7 +10,7 @@
 
 	import Btn from './Button.svelte';
 
-	import { orderStore } from '../lib/js/store.js';
+	import { orderStore, spinner, toast } from '../lib/js/store.js';
 
 	import axios from 'axios';
 	import { createEventDispatcher } from 'svelte';
@@ -100,6 +100,8 @@
 	secondaryButtonText="Cancelar"
 	on:click:button--primary={() => {
 		eliminar(orderToDelete);
+		spinner.set(true);
+		toast.set({ openToast: false });
 		orderToDelete = null;
 		open = false;
 	}}

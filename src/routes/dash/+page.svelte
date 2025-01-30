@@ -151,18 +151,33 @@
 	};
 
 	const eliminarOrden = async (data) => {
-		const status = {
-			status: false
-		};
+		try {
+			const status = {
+				status: false
+			};
 
-		const response = await axios.put(
-			`${import.meta.env.VITE_API_URL}/api/order/${data.detail.id}`,
-			status,
-			{
-				withCredentials: true
+			const response = await axios.put(
+				`${import.meta.env.VITE_API_URL}/api/order/${data.detail.id}`,
+				status,
+				{
+					withCredentials: true
+				}
+			);
+
+			if (response) {
+				spinner.set(false);
+				toast.set({ openToast: true, messageToast: 'Remito eliminado', kind: 'success' });
 			}
-		);
-		getOrders();
+			getOrders();
+		} catch (error) {
+			spinner.set(false);
+			toast.set({
+				openToast: true,
+				messageToast: 'Error al eliminar orden. No posee permisos.',
+				kind: 'error'
+			});
+			console.error('Error al obtener el PDF:', error);
+		}
 	};
 	// --- Tabla
 

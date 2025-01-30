@@ -7,7 +7,7 @@
 		DatePickerInput
 	} from 'carbon-components-svelte';
 	import Button from './Button.svelte';
-	import { mostrarForm } from './js/store.js';
+	import { mostrarForm, toast } from './js/store.js';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
@@ -33,6 +33,7 @@
 
 	const crear = async (e) => {
 		e.preventDefault();
+		toast.set({ openToast: false });
 		dispatch('crearRemito', { client, cuil, email, taxpayer, products, date });
 	};
 
