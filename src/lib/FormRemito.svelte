@@ -7,17 +7,18 @@
 		DatePickerInput
 	} from 'carbon-components-svelte';
 	import Button from './Button.svelte';
-	import { mostrarForm, toast } from './js/store.js';
+	import { mostrarForm, orderStore, toast } from './js/store.js';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
-	let client;
-	let cuil;
-	let email;
-	let taxpayer;
-	let products = [{ name: '', quantity: null, price: null }];
-	let date;
+	export let order = null;
+	let client = order ? order.client : '';
+	let cuil = order ? order.cuil : '';
+	let email = order ? order.email : '';
+	let taxpayer = order ? order.taxpayer : '';
+	let products = order ? order.product : [{ name: '', quantity: null, price: null }];
+	let date = order ? order.date : '';
 
 	let items = [
 		{ id: '0', text: 'Responsable Inscripto' },
@@ -31,10 +32,16 @@
 		taxpayer = e.detail.selectedItem.text;
 	};
 
-	const crear = async (e) => {
+	const manejadorFormulario = async (e) => {
 		e.preventDefault();
-		toast.set({ openToast: false });
-		dispatch('crearRemito', { client, cuil, email, taxpayer, products, date });
+
+		if (order) {
+			toast.set({ openToast: false });
+			dispatch('actualizarRemito', { client, cuil, email, taxpayer, products, date });
+		} else {
+			toast.set({ openToast: false });
+			dispatch('crearRemito', { client, cuil, email, taxpayer, products, date });
+		}
 	};
 
 	const cancelar = async (e) => {
@@ -57,7 +64,7 @@
 </script>
 
 <div class="form-container">
-	<FluidForm on:submit={crear}>
+	<FluidForm on:submit={manejadorFormulario}>
 		<h1>Cliente</h1>
 		<div class="input-group">
 			<TextInput
@@ -181,7 +188,7 @@
 			/>
 		</div> -->
 		<div class="button-group">
-			<Button type="submit" kind="tertiary" title="Ingresar" />
+			<Button type="submit" kind="tertiary" title={order ? 'Actualizar' : 'Crear'} />
 			<Button on:click={cancelar} kind="danger" title="Cancelar" />
 		</div>
 	</FluidForm>

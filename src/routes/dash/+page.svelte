@@ -24,6 +24,7 @@
 
 	// -- Variables
 	let order = [];
+	let orderToUpdate = null;
 	let metrics = [
 		{ id: 1, title: 'Ventas Totales', value: '-', icon: '💰' },
 		{ id: 2, title: 'Clientes Activos', value: '-', icon: '👥' },
@@ -150,6 +151,61 @@
 		}
 	};
 
+	const modificarOrden = (data) => {
+		orderToUpdate = data.detail;
+		mostrarForm.set(true);
+	};
+
+	const actualizarOrden = async (event) => {
+		try {
+			const data = {
+				date: event.detail.date,
+				client: event.detail.client,
+				cuil: event.detail.cuil,
+				email: event.detail.email,
+				taxpayer: event.detail.taxpayer,
+				product: event.detail.products.map((product) => ({
+					name: product.name,
+					quantity: product.quantity,
+					price: product.price,
+					discount: product.discount
+				}))
+			};
+
+			const response = await axios.put(
+				`${import.meta.env.VITE_API_URL}/api/orderUpdate/${orderToUpdate.id}`,
+				data,
+				{
+					withCredentials: true,
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+
+			orderToUpdate = null;
+
+			console.log(response);
+
+			if (response) {
+				spinner.set(false);
+				mostrarForm.set(false);
+				toast.set({ openToast: true, messageToast: 'Remito modificado', kind: 'success' });
+			}
+
+			getOrders();
+		} catch (error) {
+			spinner.set(false);
+			mostrarForm.set(false);
+			toast.set({
+				openToast: true,
+				messageToast: 'Error al modificicar el comprobante',
+				kind: 'error'
+			});
+			console.error('Error al modificar la orden:', error);
+		}
+	};
+
 	const eliminarOrden = async (data) => {
 		try {
 			const status = {
@@ -217,9 +273,18 @@
 <main>
 	<section>
 		{#if $mostrarForm}
-			<FormRemito on:crearRemito={(spinner.set(true), remitero)} />
+			<FormRemito
+				order={orderToUpdate}
+				on:crearRemito={(spinner.set(true), remitero)}
+				on:actualizarRemito={(spinner.set(true), actualizarOrden)}
+			/>
 		{:else if $mostrarTabla}
-			<Table on:volver={cerrarTabla} on:verPDF={abrirPDF} on:eliminar={eliminarOrden} />
+			<Table
+				on:volver={cerrarTabla}
+				on:verPDF={abrirPDF}
+				on:modificar={modificarOrden}
+				on:eliminar={eliminarOrden}
+			/>
 		{:else}
 			<Charts />
 		{/if}

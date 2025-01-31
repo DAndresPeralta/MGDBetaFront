@@ -18,6 +18,7 @@
 	// -- Variables
 	let order = [];
 	let orderToPDF = null;
+	let orderToUpdate = null;
 	let orderToDelete = null;
 	// -- Variable de estado Modal
 	let open = false;
@@ -45,6 +46,9 @@
 	const verPdf = (data) => {
 		dispatch('verPDF', data);
 	};
+	const modificar = (data) => {
+		dispatch('modificar', data);
+	};
 	const eliminar = (data) => {
 		dispatch('eliminar', data);
 	};
@@ -66,6 +70,13 @@
 							verPdf(orderToPDF);
 						}}
 						text="Ver PDF"
+					/>
+					<OverflowMenuItem
+						on:click={() => {
+							orderToUpdate = row;
+							modificar(orderToUpdate);
+						}}
+						text="Modificar"
 					/>
 					<OverflowMenuItem
 						danger
