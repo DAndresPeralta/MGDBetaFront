@@ -8,7 +8,7 @@
 	let data = [];
 
 	let options = {
-		title: 'Ventas',
+		title: 'Ventas por Condición Fiscal',
 		resizable: true,
 		toolbar: {
 			enabled: false

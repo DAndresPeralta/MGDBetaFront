@@ -81,6 +81,8 @@
 				labelText="CUIL"
 				placeholder="Ingrese el cuil del cliente"
 				bind:value={cuil}
+				minlength="13"
+				maxlength="13"
 				required
 			/>
 		</div>
