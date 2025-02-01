@@ -71,4 +71,18 @@
 	.chart-container :global(.cds--chart-holder) {
 		width: 100%;
 	}
+
+	:global(.cds--cc--chart-wrapper p) {
+		font-size: 13px !important;
+		color: #f7f0f0 !important;
+	}
+
+	:global(.cds--cc--chart-wrapper text) {
+		font-size: 12px !important;
+		fill: #f7f0f0 !important;
+	}
+
+	:global(.cds--cc--title p.title) {
+		font-size: 18px !important;
+	}
 </style>
