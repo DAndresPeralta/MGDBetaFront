@@ -25,7 +25,8 @@
 		{ id: '1', text: 'Monotributista' },
 		{ id: '2', text: 'Iva Excento' },
 		{ id: '3', text: 'Consumidor Final' },
-		{ id: '4', text: 'Consumidor Final - Mat. Primas' }
+		{ id: '4', text: 'Consumidor Final - Mat. Primas' },
+		{ id: '5', text: 'Presupuesto' }
 	];
 
 	const tax = (e) => {
