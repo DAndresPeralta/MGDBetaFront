@@ -245,7 +245,7 @@
 			let cfCounter = 0;
 			let ieCounter = 0;
 			let mtpcounter = 0;
-			let prcounter = 0;
+			let prCounter = 0;
 
 			// const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`);
 			// const orders = response.data.result;
