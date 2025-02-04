@@ -23,7 +23,12 @@
 				label: 'Ventas'
 			}
 		},
-		height: '400px'
+		color: {
+			pairing: {
+				option: 1
+			}
+		},
+		height: '500px'
 	};
 
 	$: data = [
