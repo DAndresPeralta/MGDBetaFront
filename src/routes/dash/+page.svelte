@@ -244,6 +244,8 @@
 			let mtCounter = 0;
 			let cfCounter = 0;
 			let ieCounter = 0;
+			let mtpcounter = 0;
+			let prcounter = 0;
 
 			// const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`);
 			// const orders = response.data.result;
@@ -253,15 +255,21 @@
 				if (item.taxpayer === 'CONSUMIDOR FINAL') cfCounter++;
 				if (item.taxpayer === 'IVA EXCENTO') ieCounter++;
 				if (item.taxpayer === 'RESPONSABLE INSCRIPTO') riCounter++;
+				if (item.taxpayer === 'CONSUMIDOR FINAL - MAT. PRIMAS') mtpCounter++;
+				if (item.taxpayer === 'PRESUPUESTO') prCounter++;
 			});
 
 			metric1Order.set({
 				ri: riCounter,
 				mt: mtCounter,
 				cf: cfCounter,
-				ie: ieCounter
+				ie: ieCounter,
+				cfm: mtpCounter,
+				p: prCounter
 			});
-		} catch (error) {}
+		} catch (error) {
+			console.error('Error al obtener métricas', error);
+		}
 	};
 
 	onMount(() => {

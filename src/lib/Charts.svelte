@@ -42,6 +42,14 @@
 		{
 			group: 'Iva Excento',
 			value: $metric1Order.ie
+		},
+		{
+			group: 'Consumidor Final - Mat. Primas',
+			value: $metric1Order.cfm
+		},
+		{
+			group: 'Presupuesto',
+			value: $metric1Order.p
 		}
 	];
 </script>
