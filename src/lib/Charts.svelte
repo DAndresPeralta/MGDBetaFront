@@ -28,7 +28,7 @@
 				option: 1
 			}
 		},
-		height: '425px'
+		height: '450px'
 	};
 
 	$: data = [
