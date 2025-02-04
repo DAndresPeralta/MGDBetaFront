@@ -20,5 +20,5 @@ export const metric1Order = writable({
 	cf: 0,
 	ie: 0,
 	cfm: 0,
-	p: O
+	p: 0
 });
