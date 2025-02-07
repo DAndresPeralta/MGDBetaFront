@@ -55,7 +55,8 @@
 					quantity: product.quantity,
 					price: product.price,
 					discount: product.discount
-				}))
+				})),
+				sendEmail: event.detail.sendEmail
 			};
 
 			const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/order`, data, {
@@ -169,7 +170,8 @@
 					quantity: product.quantity,
 					price: product.price,
 					discount: product.discount
-				}))
+				})),
+				sendEmail: event.detail.sendEmail
 			};
 
 			const response = await axios.put(

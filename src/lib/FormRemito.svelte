@@ -4,7 +4,8 @@
 		TextInput,
 		Dropdown,
 		DatePicker,
-		DatePickerInput
+		DatePickerInput,
+		Toggle
 	} from 'carbon-components-svelte';
 	import Button from './Button.svelte';
 	import { mostrarForm, orderStore, toast } from './js/store.js';
@@ -19,6 +20,7 @@
 	let taxpayer = order ? order.taxpayer : '';
 	let products = order ? order.product : [{ name: '', quantity: null, price: null }];
 	let date = order ? order.date : '';
+	let sendEmail = true;
 
 	let items = [
 		{ id: '0', text: 'Responsable Inscripto' },
@@ -38,10 +40,10 @@
 
 		if (order) {
 			toast.set({ openToast: false });
-			dispatch('actualizarRemito', { client, cuil, email, taxpayer, products, date });
+			dispatch('actualizarRemito', { client, cuil, email, taxpayer, products, date, sendEmail });
 		} else {
 			toast.set({ openToast: false });
-			dispatch('crearRemito', { client, cuil, email, taxpayer, products, date });
+			dispatch('crearRemito', { client, cuil, email, taxpayer, products, date, sendEmail });
 		}
 	};
 
@@ -108,9 +110,14 @@
 			/> -->
 		</div>
 		<div class="input-group">
-			<DatePicker datePickerType="single" on:change bind:value={date}>
-				<DatePickerInput size="xl" placeholder="Seleccione una fecha" />
-			</DatePicker>
+			<div>
+				<DatePicker datePickerType="single" on:change bind:value={date}>
+					<DatePickerInput size="xl" placeholder="Seleccione una fecha" />
+				</DatePicker>
+			</div>
+			<div style="margin: 1rem 0 1rem">
+				<Toggle labelText="¿Desea enviar email al cliente?" bind:toggled={sendEmail} />
+			</div>
 		</div>
 		<h1>Producto</h1>
 
