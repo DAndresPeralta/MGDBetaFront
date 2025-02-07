@@ -116,7 +116,7 @@
 				</DatePicker>
 			</div>
 			<div style="margin: 1rem 0 1rem">
-				<Toggle labelText="¿Desea enviar email al cliente?" bind:toggled={sendEmail} />
+				<Toggle labelText="¿Desea enviar el comprobante al cliente?" bind:toggled={sendEmail} />
 			</div>
 		</div>
 		<h1>Producto</h1>
