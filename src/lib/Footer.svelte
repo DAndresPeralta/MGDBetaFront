@@ -1,5 +1,5 @@
 <footer>
-	<h1>© 2024 Milessima - Feliz San Valentin ❤️</h1>
+	<h1>© 2024 Milessima</h1>
 </footer>
 
 <style>
@@ -7,7 +7,7 @@
 		display: flex;
 		/*Eliminamos el margen inferior y anclamos al fondo*/
 		bottom: 0;
-		background-color: #e0445c;
+		background-color: #0f62fe;
 		justify-content: center;
 		align-items: center;
 		/*Eliminamos el margen inferior y anclamos al fondo*/
