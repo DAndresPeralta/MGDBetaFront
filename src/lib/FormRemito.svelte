@@ -9,18 +9,26 @@
 	} from 'carbon-components-svelte';
 	import Button from './Button.svelte';
 	import { mostrarForm, orderStore, toast } from './js/store.js';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import axios from 'axios';
 
 	const dispatch = createEventDispatcher();
 
 	export let order = null;
+	let clientId = order ? order.clientId : '';
 	let client = order ? order.client : '';
 	let cuil = order ? order.cuil : '';
 	let email = order ? order.email : '';
+	let address = order ? order.address : '';
 	let taxpayer = order ? order.taxpayer : '';
 	let products = order ? order.product : [{ name: '', quantity: null, price: null }];
 	let date = order ? order.date : '';
 	let sendEmail = true;
+
+	// To renderize clients on dropdown
+	let clients = [];
+	let clientsToSelect = [];
+	let selectedTax = null;
 
 	let items = [
 		{ id: '0', text: 'Responsable Inscripto' },
@@ -31,19 +39,62 @@
 		{ id: '5', text: 'Presupuesto' }
 	];
 
+	// --- Renderizado de clientes desde el back
+
+	onMount(async () => {
+		try {
+			// Get clients from DB
+			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/client`, {
+				withCredentials: true,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			// Store clients, if there is no client will declar like empty array. We avoid null (broke)
+			clients = (await response.data.result) || [];
+
+			// We store client with id and text, both required for dropdown component
+			clientsToSelect = clients.map((client) => ({
+				id: client._id,
+				text: client.companyName
+			}));
+		} catch (error) {
+			console.error('Error al obtener clientes:', error);
+		}
+	});
+
+	const selectClient = (e) => {
+		// Get id from client selected on dropdown
+		const id = e.detail.selectedItem.id;
+		// Match id from dropdown with id client DB
+		const selected = clients.find((client) => client._id === id);
+		// Assign DB client atributes to array client to renderize
+		if (selected) {
+			clientId = selected._id;
+			client = selected.companyName;
+			cuil = selected.cuil;
+			email = selected.email;
+			address = selected.address;
+			taxpayer = selected.taxpayer;
+		}
+	};
+
 	const tax = (e) => {
 		taxpayer = e.detail.selectedItem.text;
 	};
+
+	// --- Renderizado de clientes desde el back
 
 	const manejadorFormulario = async (e) => {
 		e.preventDefault();
 
 		if (order) {
 			toast.set({ openToast: false });
-			dispatch('actualizarRemito', { client, cuil, email, taxpayer, products, date, sendEmail });
+			dispatch('actualizarRemito', { clientId, products, date, sendEmail });
 		} else {
 			toast.set({ openToast: false });
-			dispatch('crearRemito', { client, cuil, email, taxpayer, products, date, sendEmail });
+			dispatch('crearRemito', { clientId, products, date, sendEmail });
 		}
 	};
 
@@ -70,11 +121,12 @@
 	<FluidForm on:submit={manejadorFormulario}>
 		<h1>Cliente</h1>
 		<div class="input-group">
-			<TextInput
-				type="text"
-				labelText="Cliente"
-				placeholder="Ingrese la razón social del cliente"
-				bind:value={client}
+			<Dropdown
+				items={clientsToSelect || []}
+				on:select={selectClient}
+				bind:selectedItem={clientsToSelect}
+				size="xl"
+				label={client ? client : 'Seleccione un Cliente'}
 				required
 			/>
 		</div>
@@ -86,6 +138,7 @@
 				bind:value={cuil}
 				minlength="13"
 				maxlength="13"
+				disabled
 				required
 			/>
 		</div>
@@ -95,23 +148,33 @@
 				labelText="Email"
 				placeholder="Ingrese el correo electrónico del cliente"
 				bind:value={email}
+				disabled
 				required
 			/>
 		</div>
 		<div class="input-group">
-			<Dropdown on:select={tax} {items} size="xl" label="Condición Fiscal" required />
-
-			<!-- <TextInput
+			<TextInput
 				type="text"
-				labelText="Condición"
-				placeholder="Ingrese la condición frente a AFIP del cliente"
-				bind:value={taxpayer}
+				labelText="Direccion Fiscal"
+				placeholder="Ingrese la dirección fiscal del cliente"
+				bind:value={address}
+				disabled
 				required
-			/> -->
+			/>
+		</div>
+		<div class="input-group">
+			<TextInput
+				type="text"
+				labelText="Condicion Fiscal"
+				placeholder="Ingrese condición fiscal del cliente"
+				bind:value={taxpayer}
+				disabled
+				required
+			/>
 		</div>
 		<div class="input-group">
 			<div>
-				<DatePicker datePickerType="single" on:change bind:value={date}>
+				<DatePicker datePickerType="single" dateFormat="d/m/Y" on:change bind:value={date}>
 					<DatePickerInput size="xl" placeholder="Seleccione una fecha" />
 				</DatePicker>
 			</div>

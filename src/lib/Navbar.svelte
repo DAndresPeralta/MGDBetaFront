@@ -14,7 +14,12 @@
 	import axios from 'axios';
 	import { goto } from '$app/navigation';
 	import errores from '../utils/errors.js';
-	import { mostrarTabla, mostrarForm } from './js/store.js';
+	import {
+		mostrarTabla,
+		mostrarForm,
+		mostrarFormCliente,
+		mostrarTablaCliente
+	} from './js/store.js';
 	let isSideNavOpen = false;
 
 	// export const mostrarProdutos = (e) => {
@@ -35,12 +40,28 @@
 		e.preventDefault();
 		mostrarForm.set(true);
 		mostrarTabla.set(false);
+		mostrarFormCliente.set(false);
+		mostrarTablaCliente.set(false);
+	};
+
+	const crearCliente = (e) => {
+		e.preventDefault();
+		mostrarTablaCliente.set(false);
+		mostrarFormCliente.set(true);
 	};
 
 	const tabla = (e) => {
 		e.preventDefault();
 		mostrarTabla.set(true);
 		mostrarForm.set(false);
+		mostrarFormCliente.set(false);
+		mostrarTablaCliente.set(false);
+	};
+
+	const tablaCliente = (e) => {
+		e.preventDefault();
+		mostrarFormCliente.set(false);
+		mostrarTablaCliente.set(true);
 	};
 
 	const cerrarSesion = async (e) => {
@@ -82,6 +103,10 @@
 		<HeaderNavMenu text="Comprobantes">
 			<HeaderNavItem on:click={crearRemito} href="/" text="Crear" />
 			<HeaderNavItem on:click={tabla} href="/" text="Consultar" />
+		</HeaderNavMenu>
+		<HeaderNavMenu text="Clientes">
+			<HeaderNavItem on:click={crearCliente} href="/" text="Crear" />
+			<HeaderNavItem on:click={tablaCliente} ref="/" text="Consultar" />
 		</HeaderNavMenu>
 	</HeaderNav>
 	<div class="botonCerrarSesion">
