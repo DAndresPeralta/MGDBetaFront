@@ -112,7 +112,7 @@
 	on:close={() => (open = false)}
 	on:submit
 >
-	<p>Se eliminará un producto. ¿Esta seguro que desea continuar?</p>
+	<p>Se eliminará un cliente. ¿Esta seguro que desea continuar?</p>
 </Modal>
 
 <style>
