@@ -59,9 +59,11 @@
 	};
 
 	const tablaCliente = (e) => {
-		e.preventDefault();
-		mostrarFormCliente.set(false);
+		e.preventDefault();		
 		mostrarTablaCliente.set(true);
+		mostrarFormCliente.set(false);
+		mostrarTabla.set(false);
+		mostrarForm.set(false);
 	};
 
 	const cerrarSesion = async (e) => {
