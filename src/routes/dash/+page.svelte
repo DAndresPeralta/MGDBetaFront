@@ -4,27 +4,35 @@
 	// --- Components
 	import FormRemito from '$lib/FormRemito.svelte';
 	import Table from '$lib/Table.svelte';
+	import TableClient from '$lib/TableClient.svelte';
 	import Charts from '$lib/Charts.svelte';
 	import Notify from '$lib/Notify.svelte';
 	import Footer from '$lib/Footer.svelte';
+	import FormCliente from '$lib/FormCliente.svelte';
+	import Form from '$lib/Form.svelte';
 	// - Carbon Components
 	import { Modal, Loading } from 'carbon-components-svelte';
 	// --- Stores
 	import {
 		mostrarForm,
+		mostrarFormCliente,
 		mostrarTabla,
 		orderStore,
 		modalStore,
 		toast,
 		spinner,
-		metric1Order
+		metric1Order,
+		mostrarTablaCliente,
+		clientStore
 	} from '../../lib/js/store.js';
 	// --- States
 	import { onMount } from 'svelte';
 
 	// -- Variables
 	let order = [];
+	let client = [];
 	let orderToUpdate = null;
+	let clientToUpdate = null;
 	let metrics = [
 		{ id: 1, title: 'Ventas Totales', value: '-', icon: '💰' },
 		{ id: 2, title: 'Clientes Activos', value: '-', icon: '👥' },
@@ -34,22 +42,21 @@
 
 	const dateFormat = (date) => {
 		const newDate = new Date(date);
-		return newDate.toLocaleString('es-ES', {
-			day: '2-digit',
-			month: '2-digit',
-			year: 'numeric'
-		});
+
+		const year = newDate.getFullYear();
+		const month = String(newDate.getMonth() + 1).padStart(2, '0');
+		const day = String(newDate.getDate()).padStart(2, '0');
+
+		return `${day}/${month}/${year}`;
 	};
 
-	// --- Remito
+	// --- COMPROBANTES ------------------------------------------------------------------------------------------------------------
+
 	const remitero = async (event) => {
 		try {
 			const data = {
+				clientId: event.detail.clientId,
 				date: event.detail.date,
-				client: event.detail.client,
-				cuil: event.detail.cuil,
-				email: event.detail.email,
-				taxpayer: event.detail.taxpayer,
 				product: event.detail.products.map((product) => ({
 					name: product.name,
 					quantity: product.quantity,
@@ -84,87 +91,12 @@
 			console.error('Error al obtener el PDF:', error);
 		}
 	};
-	// --- Remito
-	// --- Tabla
-	const getOrders = async () => {
-		const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`, {
-			withCredentials: true
-		});
-		order = response.data.result.map((item) => ({
-			id: item._id,
-			serie: item.serie,
-			date: dateFormat(item.date),
-			client: item.client,
-			cuil: item.cuil,
-			email: item.email,
-			taxpayer: item.taxpayer,
-			product: item.product,
-			total: item.total
-		}));
-		metricas(order);
-		orderStore.set(order);
-	};
-
-	const cerrarTabla = () => {
-		mostrarTabla.set(false);
-	};
-
-	const abrirPDF = async (e) => {
-		try {
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/api/pdfview/${e.detail.id}`, {
-				method: 'GET',
-				credentials: 'include'
-			});
-
-			const pdfBlob = await response.blob();
-			if (pdfBlob.size === 0) {
-				modalStore.set({
-					isOpen: true,
-					id: `${e.detail.id}`
-				});
-
-				return;
-			}
-
-			const pdfUrl = URL.createObjectURL(pdfBlob);
-			window.open(pdfUrl, '_blank');
-			setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
-		} catch (error) {
-			console.error('Error al obtener el PDF:', error);
-		}
-	};
-
-	const generarPDF = async (id) => {
-		try {
-			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pdfrec/${id}`, {
-				responseType: 'blob',
-				withCredentials: true,
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			const pdfUrl = URL.createObjectURL(response.data);
-			window.open(pdfUrl, '_blank');
-			setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
-		} catch (error) {
-			console.error('Error al obtener el PDF:', error);
-		}
-	};
-
-	const modificarOrden = (data) => {
-		orderToUpdate = data.detail;
-		mostrarForm.set(true);
-	};
 
 	const actualizarOrden = async (event) => {
 		try {
 			const data = {
+				clientId: event.detail.clientId,
 				date: event.detail.date,
-				client: event.detail.client,
-				cuil: event.detail.cuil,
-				email: event.detail.email,
-				taxpayer: event.detail.taxpayer,
 				product: event.detail.products.map((product) => ({
 					name: product.name,
 					quantity: product.quantity,
@@ -186,8 +118,6 @@
 			);
 
 			orderToUpdate = null;
-
-			console.log(response);
 
 			if (response) {
 				spinner.set(false);
@@ -237,7 +167,250 @@
 			console.error('Error al obtener el PDF:', error);
 		}
 	};
-	// --- Tabla
+
+	const modificarOrden = (data) => {
+		orderToUpdate = data.detail;
+		mostrarForm.set(true);
+	};
+
+	// --- TABLA -------------------------
+
+	const getOrders = async () => {
+		try {
+			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`, {
+				withCredentials: true
+			});
+			const item = response.data.result || [];
+			order = item.map((item) => ({
+				id: item._id,
+				serie: item.serie,
+				date: dateFormat(item.date),
+				client: item.client.companyName,
+				clientId: item.client._id,
+				cuil: item.client.cuil,
+				email: item.client.email,
+				address: item.client.address,
+				taxpayer: item.client.taxpayer,
+				product: item.product,
+				total: item.total
+			}));
+			metricas(order);
+			orderStore.set(order);
+		} catch (error) {
+			console.error('Error al traer comprobantes:', error);
+		}
+	};
+
+	const abrirPDF = async (e) => {
+		try {
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/api/pdfview/${e.detail.id}`, {
+				method: 'GET',
+				credentials: 'include'
+			});
+
+			const pdfBlob = await response.blob();
+			if (pdfBlob.size === 0) {
+				modalStore.set({
+					isOpen: true,
+					id: `${e.detail.id}`
+				});
+
+				return;
+			}
+
+			const pdfUrl = URL.createObjectURL(pdfBlob);
+			window.open(pdfUrl, '_blank');
+			setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
+		} catch (error) {
+			console.error('Error al obtener el PDF:', error);
+		}
+	};
+
+	const generarPDF = async (id) => {
+		try {
+			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pdfrec/${id}`, {
+				responseType: 'blob',
+				withCredentials: true,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			const pdfUrl = URL.createObjectURL(response.data);
+			window.open(pdfUrl, '_blank');
+			setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
+		} catch (error) {
+			console.error('Error al obtener el PDF:', error);
+		}
+	};
+
+	const cerrarTabla = () => {
+		mostrarTabla.set(false);
+		mostrarTablaCliente.set(false);
+	};
+
+	// --- TABLA -------------------------
+
+	// --- COMPROBANTES ------------------------------------------------------------------------------------------------------------
+
+	// **************************************
+
+	// --- CLIENTE -----------------------------------------------------------------------------------------------------------------
+
+	const cliente = async (event) => {
+		try {
+			const data = {
+				companyName: event.detail.companyName,
+				cuil: event.detail.cuil,
+				email: event.detail.email,
+				address: event.detail.address,
+				taxpayer: event.detail.taxpayer
+			};
+
+			const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/client`, data, {
+				withCredentials: true,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (response.status >= 200 && response.status < 300) {
+				setTimeout(() => {
+					spinner.set(false);
+					mostrarFormCliente.set(false);
+					toast.set({
+						openToast: true,
+						messageToast: response.data.message,
+						kind: 'success'
+					});
+				}, 1400);
+			}
+		} catch (error) {
+			setTimeout(() => {
+				spinner.set(false);
+				toast.set({
+					openToast: true,
+					messageToast: error.response.data.message,
+					kind: 'error'
+				});
+				console.error('Error al crear el cliente:', error);
+			}, 1400);
+		}
+		getClient();
+	};
+
+	const actualizarCliente = async (event) => {
+		try {
+			const data = {
+				companyName: event.detail.companyName,
+				cuil: event.detail.cuil,
+				email: event.detail.email,
+				address: event.detail.address,
+				taxpayer: event.detail.taxpayer
+			};
+
+			const response = await axios.put(
+				`${import.meta.env.VITE_API_URL}/api/client/${clientToUpdate.id}`,
+				data,
+				{
+					withCredentials: true,
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+
+			clientToUpdate = null;
+
+			if (response) {
+				setTimeout(() => {
+					spinner.set(false);
+					mostrarFormCliente.set(false);
+					toast.set({ openToast: true, messageToast: response.data.message, kind: 'success' });
+				}, 1400);
+			}
+
+			getClient();
+		} catch (error) {
+			setTimeout(() => {
+				spinner.set(false);
+				mostrarFormCliente.set(false);
+				toast.set({
+					openToast: true,
+					messageToast: response.data.message,
+					kind: 'error'
+				});
+				console.error('Error al modificar el cliente:', error);
+			}, 1200);
+		}
+	};
+
+	const eliminarCliente = async (data) => {
+		try {
+			const status = {
+				status: false
+			};
+
+			const response = await axios.put(
+				`${import.meta.env.VITE_API_URL}/api/delclient/${data.detail.id}`,
+				status,
+				{
+					withCredentials: true
+				}
+			);
+
+			setTimeout(() => {
+				if (response.status >= 200 && response.status < 300) {
+					spinner.set(false);
+					toast.set({ openToast: true, messageToast: response.data.message, kind: 'success' });
+				}
+			}, 1200);
+
+			getClient();
+		} catch (error) {
+			spinner.set(false);
+			toast.set({
+				openToast: true,
+				messageToast: error.response.data.message,
+				kind: 'error'
+			});
+			console.error('Error al eliminar el cliente:', error);
+		}
+	};
+
+	const modificarCliente = async (data) => {
+		clientToUpdate = data.detail;
+		mostrarFormCliente.set(true);
+	};
+
+	// --- TABLA ------------------------
+
+	const getClient = async () => {
+		try {
+			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/client`);
+			const item = response.data.result || [];
+
+			client = item.map((item) => ({
+				id: item._id,
+				code: item.code,
+				companyName: item.companyName,
+				cuil: item.cuil,
+				email: item.email,
+				address: item.address,
+				taxpayer: item.taxpayer
+			}));
+
+			clientStore.set(client);
+		} catch (error) {
+			console.error('Error al traer clientes:', error);
+		}
+	};
+
+	// --- TABLA ------------------------
+
+	// --- CLIENTE -----------------------------------------------------------------------------------------------------------------
+
+	// --- METRICAS ----------------------------------------------------------------------------------------------------------------
 
 	// --- Métricas
 	const metricas = async (orders) => {
@@ -276,6 +449,7 @@
 
 	onMount(() => {
 		getOrders();
+		getClient();
 		// metricas();
 	});
 </script>
@@ -288,12 +462,23 @@
 				on:crearRemito={(spinner.set(true), remitero)}
 				on:actualizarRemito={(spinner.set(true), actualizarOrden)}
 			/>
+		{:else if $mostrarFormCliente}
+			<FormCliente
+				client={clientToUpdate}
+				on:crearCliente={(spinner.set(true), cliente)}
+				on:actualizarCliente={(spinner.set(true), actualizarCliente)}
+			/>
 		{:else if $mostrarTabla}
 			<Table
 				on:volver={cerrarTabla}
 				on:verPDF={abrirPDF}
 				on:modificar={modificarOrden}
 				on:eliminar={eliminarOrden}
+			/>
+		{:else if $mostrarTablaCliente}<TableClient
+				on:volver={cerrarTabla}
+				on:modificar={modificarCliente}
+				on:eliminar={eliminarCliente}
 			/>
 		{:else}
 			<Charts />
