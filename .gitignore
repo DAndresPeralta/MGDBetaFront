@@ -13,7 +13,7 @@ node_modules
 Thumbs.db
 
 # Env
-.env
+.env.development
 .env.*
 !.env.example
 !.env.test
