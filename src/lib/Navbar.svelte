@@ -48,6 +48,8 @@
 		e.preventDefault();
 		mostrarTablaCliente.set(false);
 		mostrarFormCliente.set(true);
+		mostrarForm.set(false);
+		mostrarTabla.set(false);
 	};
 
 	const tabla = (e) => {
@@ -59,7 +61,7 @@
 	};
 
 	const tablaCliente = (e) => {
-		e.preventDefault();		
+		e.preventDefault();
 		mostrarTablaCliente.set(true);
 		mostrarFormCliente.set(false);
 		mostrarTabla.set(false);
