@@ -8,7 +8,7 @@
 		Toggle
 	} from 'carbon-components-svelte';
 	import Button from './Button.svelte';
-	import { mostrarFormCliente, toast } from './js/store.js';
+	import { mostrarFormCliente, toast, spinner } from './js/store.js';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
@@ -37,9 +37,11 @@
 		e.preventDefault();
 
 		if (client) {
+			spinner.set(false);
 			toast.set({ openToast: false });
 			dispatch('actualizarCliente', { companyName, cuil, email, address, taxpayer });
 		} else {
+			spinner.set(false);
 			toast.set({ openToast: false });
 			dispatch('crearCliente', { companyName, cuil, email, address, taxpayer });
 		}
