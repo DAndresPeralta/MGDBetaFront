@@ -20,6 +20,7 @@
 		mostrarFormCliente,
 		mostrarTablaCliente
 	} from './js/store.js';
+	import api from '../lib/js/api.js';
 	let isSideNavOpen = false;
 
 	// export const mostrarProdutos = (e) => {
@@ -71,16 +72,7 @@
 	const cerrarSesion = async (e) => {
 		try {
 			e.preventDefault();
-			const response = await axios.post(
-				`${import.meta.env.VITE_API_URL}/api/logout`,
-				{},
-				{
-					withCredentials: true,
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}
-			);
+			const response = await api.post(`/api/logout`, {});
 			const res = response.data;
 			console.log(res);
 

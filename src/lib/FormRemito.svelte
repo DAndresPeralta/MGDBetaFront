@@ -9,6 +9,7 @@
 	} from 'carbon-components-svelte';
 	import Button from './Button.svelte';
 	import { mostrarForm, orderStore, toast } from './js/store.js';
+	import api from '../lib/js/api.js';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import axios from 'axios';
 
@@ -44,12 +45,7 @@
 	onMount(async () => {
 		try {
 			// Get clients from DB
-			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/client`, {
-				withCredentials: true,
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
+			const response = await api.get(`/api/client`);
 
 			// Store clients, if there is no client will declar like empty array. We avoid null (broke)
 			clients = (await response.data.result) || [];

@@ -25,6 +25,7 @@
 		mostrarTablaCliente,
 		clientStore
 	} from '../../lib/js/store.js';
+	import api from '../../lib/js/api.js';
 	// --- States
 	import { onMount } from 'svelte';
 
@@ -66,12 +67,7 @@
 				sendEmail: event.detail.sendEmail
 			};
 
-			const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/order`, data, {
-				withCredentials: true,
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
+			const response = await api.post(`/api/order`, data);
 
 			if (response) {
 				spinner.set(false);
@@ -85,7 +81,7 @@
 			mostrarForm.set(false);
 			toast.set({
 				openToast: true,
-				messageToast: 'Error en la creación del remito',
+				messageToast: 'Error al crear el comprobante. No posee permisos.',
 				kind: 'error'
 			});
 			console.error('Error al obtener el PDF:', error);
@@ -106,16 +102,7 @@
 				sendEmail: event.detail.sendEmail
 			};
 
-			const response = await axios.put(
-				`${import.meta.env.VITE_API_URL}/api/orderUpdate/${orderToUpdate.id}`,
-				data,
-				{
-					withCredentials: true,
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}
-			);
+			const response = await api.put(`/api/orderUpdate/${orderToUpdate.id}`, data);
 
 			orderToUpdate = null;
 
@@ -144,13 +131,7 @@
 				status: false
 			};
 
-			const response = await axios.put(
-				`${import.meta.env.VITE_API_URL}/api/order/${data.detail.id}`,
-				status,
-				{
-					withCredentials: true
-				}
-			);
+			const response = await api.put(`/api/order/${data.detail.id}`, status);
 
 			if (response) {
 				spinner.set(false);
@@ -177,9 +158,7 @@
 
 	const getOrders = async () => {
 		try {
-			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/order`, {
-				withCredentials: true
-			});
+			const response = await api.get(`/api/order`);
 			const item = response.data.result || [];
 			order = item.map((item) => ({
 				id: item._id,
@@ -203,12 +182,11 @@
 
 	const abrirPDF = async (e) => {
 		try {
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/api/pdfview/${e.detail.id}`, {
-				method: 'GET',
-				credentials: 'include'
+			const response = await api.get(`/api/pdfview/${e.detail.id}`, {
+				responseType: 'blob'
 			});
 
-			const pdfBlob = await response.blob();
+			const pdfBlob = response.data;
 			if (pdfBlob.size === 0) {
 				modalStore.set({
 					isOpen: true,
@@ -228,12 +206,8 @@
 
 	const generarPDF = async (id) => {
 		try {
-			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pdfrec/${id}`, {
-				responseType: 'blob',
-				withCredentials: true,
-				headers: {
-					'Content-Type': 'application/json'
-				}
+			const response = await api.get(`/api/pdfrec/${id}`, {
+				responseType: 'blob'
 			});
 
 			const pdfUrl = URL.createObjectURL(response.data);
@@ -267,12 +241,7 @@
 				taxpayer: event.detail.taxpayer
 			};
 
-			const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/client`, data, {
-				withCredentials: true,
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
+			const response = await api.post(`/api/client`, data);
 
 			if (response.status >= 200 && response.status < 300) {
 				setTimeout(() => {
@@ -309,16 +278,7 @@
 				taxpayer: event.detail.taxpayer
 			};
 
-			const response = await axios.put(
-				`${import.meta.env.VITE_API_URL}/api/client/${clientToUpdate.id}`,
-				data,
-				{
-					withCredentials: true,
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}
-			);
+			const response = await put.put(`/api/client/${clientToUpdate.id}`, data);
 
 			clientToUpdate = null;
 
@@ -351,13 +311,7 @@
 				status: false
 			};
 
-			const response = await axios.put(
-				`${import.meta.env.VITE_API_URL}/api/delclient/${data.detail.id}`,
-				status,
-				{
-					withCredentials: true
-				}
-			);
+			const response = await api.put(`/api/delclient/${data.detail.id}`, status);
 
 			setTimeout(() => {
 				if (response.status >= 200 && response.status < 300) {
@@ -387,7 +341,7 @@
 
 	const getClient = async () => {
 		try {
-			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/client`);
+			const response = await api.get(`/api/client`);
 			const item = response.data.result || [];
 
 			client = item.map((item) => ({
