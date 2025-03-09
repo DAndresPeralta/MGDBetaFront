@@ -48,6 +48,8 @@
 		e.preventDefault();
 		mostrarTablaCliente.set(false);
 		mostrarFormCliente.set(true);
+		mostrarForm.set(false);
+		mostrarTabla.set(false);
 	};
 
 	const tabla = (e) => {
@@ -60,8 +62,10 @@
 
 	const tablaCliente = (e) => {
 		e.preventDefault();
-		mostrarFormCliente.set(false);
 		mostrarTablaCliente.set(true);
+		mostrarFormCliente.set(false);
+		mostrarTabla.set(false);
+		mostrarForm.set(false);
 	};
 
 	const cerrarSesion = async (e) => {

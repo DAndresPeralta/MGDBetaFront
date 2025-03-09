@@ -203,12 +203,12 @@
 
 	const abrirPDF = async (e) => {
 		try {
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/api/pdfview/${e.detail.id}`, {
-				method: 'GET',
-				credentials: 'include'
+			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pdfview/${e.detail.id}`, {
+				responseType: 'blob',
+           			withCredentials: true,
 			});
 
-			const pdfBlob = await response.blob();
+			const pdfBlob = response.data;
 			if (pdfBlob.size === 0) {
 				modalStore.set({
 					isOpen: true,
