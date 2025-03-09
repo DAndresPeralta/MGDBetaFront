@@ -25,7 +25,6 @@
 		mostrarTablaCliente,
 		clientStore
 	} from '../../lib/js/store.js';
-	import api from '../../lib/js/api.js';
 	// --- States
 	import { onMount } from 'svelte';
 
@@ -204,9 +203,10 @@
 
 	const abrirPDF = async (e) => {
 		try {
-        const response = await api.get(`/api/pdfview/${e.detail.id}`, {
-            responseType: 'blob',
-        });
+			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pdfview/${e.detail.id}`, {
+				responseType: 'blob',
+           			withCredentials: true,
+			});
 
 			const pdfBlob = response.data;
 			if (pdfBlob.size === 0) {
