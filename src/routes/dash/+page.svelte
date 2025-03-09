@@ -25,6 +25,7 @@
 		mostrarTablaCliente,
 		clientStore
 	} from '../../lib/js/store.js';
+	import api from '../../lib/js/api.js';
 	// --- States
 	import { onMount } from 'svelte';
 
